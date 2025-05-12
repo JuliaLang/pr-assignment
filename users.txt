@@ -1,3 +1,7 @@
+# One GitHub username per line.
+# Each username must begin with @
+# Lines starting with # are comments.
+
 @StefanKarpinski
 @LilithHafner
 @DilumAluthge
