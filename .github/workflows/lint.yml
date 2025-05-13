@@ -25,7 +25,7 @@ jobs:
           fail = false
           for (i,line) in enumerate(eachline(filename, keep=true))
               if !occursin(r"^(@[a-zA-Z0-9]+)?(\s*#.*)?\n$", line)
-                  println("::error file=$filename,line=$i::Line does not match linter regex: $line")
+                  println("::error file=$filename,line=$i::Line $i does not match linter regex: $line")
                   global fail = true
               end
           end
