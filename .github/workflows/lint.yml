@@ -22,44 +22,14 @@ jobs:
       - name: Run the linter on the users.txt file
         run: |
           filename = "users.txt"
-          original_file_contents = read(filename, String)
-
-          # Step 1: Split into lines:
-          lines = split(original_file_contents, '\n')
-
-          # Step 2: Remove all comments:
-          const comment_character = '#'
-          function remove_comment_from_line(old_line::AbstractString)
-              if occursin(comment_character, old_line)
-                  elements = split(old_line, comment_character)
-                  # Discard everything after the first #:
-                  modified_line = elements[1]
-              else
-                  modified_line = old_line
-              end
-              return modified_line
-          end
-          lines = remove_comment_from_line.(lines)
-          
-          # Step 3: Strip all whitespace from the beginning and end of each line:
-          lines = strip.(lines)
-
-          # Step 4: Exclude all empty lines:
-          filter!(!isempty, lines)
-
-          # Step 5: For each line, make sure it matches the following regex:
-          r = r"^@([A-Za-z0-9\-]+?)$"
-          all_lines_are_good = true
-          for line in lines
-              this_line_is_good = occursin(r, line)
-              if this_line_is_good
-                  @info "Line is good: $(line)"
-              else
-                  global all_lines_are_good = false
-                  @error "Line does not match linter regex: $(line)"
+          fail = false
+          for (i,line) in enumerate(eachline(filename, keep=true))
+              if !occursin(r"^(@[a-zA-Z0-9]+)?(\s*#.*)?\n$", line)
+                  println("::error file=$filename,line=$i::Line does not match linter regex")
+                  global fail = true
               end
           end
-          if !all_lines_are_good
+          if fail
               error("One or more lines failed the linter regex")
           end
         shell: julia --color=yes {0}
