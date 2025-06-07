@@ -4,7 +4,6 @@
 
 @StefanKarpinski
 @LilithHafner
-@DilumAluthge
 @oscardssmith
 @vtjnash
 @JeffBezanson
